@@ -1,6 +1,12 @@
 from django.db import models
+from django.db.models.query import QuerySet
 from django.utils import timezone 
 from django.contrib.auth.models import User
+
+class PublishedManager(models.Manager):
+    """ A custom model manager to retrieve all posts that have a PUBLISHED status """
+    def get_queryset(self) -> QuerySet:
+        return super().get_queryset().filter(status = Post.Status.PUBLISHED)
 
 class Post(models.Model):
     """ Post model to allow storage of blog posts in db. """
@@ -23,6 +29,9 @@ class Post(models.Model):
     status = models.CharField(max_length=2,
                               choices=Status.choices,
                               default=Status.DRAFT)
+    
+    objects = models.Manager() # default manager
+    published = PublishedManager() # custom manager
 
     class Meta:
         """ Posts will be returned in reverse chronological order by default"""
