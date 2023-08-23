@@ -4,11 +4,10 @@ from django.utils import timezone
 class Post(models.Model):
     """ Post model to allow storage of blog posts in db. """
 
-    class Status(models.TextChoice):
+    class Status(models.TextChoices):
         """ subclass to allow writers to save blog posts as draft or published status. """
         DRAFT = 'DF', 'Draft'
         PUBLISHED = 'PB', 'Published'
-
 
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250)
@@ -24,7 +23,7 @@ class Post(models.Model):
         """ Posts will be returned in reverse chronological order by default"""
         ordering = ['-publish']
         indexes = [
-            models.IndexField(fields=['-publish']),
+            models.Index(fields=['-publish']),
         ]
 
     def __str__(self) -> str:
