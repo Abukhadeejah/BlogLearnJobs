@@ -10,13 +10,16 @@ def post_list(request):
                   {'posts': posts})
 
 
-def post_details(request, id):
+def post_detail(request, year, month, day, post):
     # Get the details of a post by its id
     post = get_object_or_404(Post, 
-                             id=id,
-                             status=Post.Status.PUBLISHED)
+                             status=Post.Status.PUBLISHED, 
+                             slug=post, 
+                             publish__year=year, 
+                             publish__month=month, 
+                             publish__day=day)
     
     return render(request, 
-                  'blog/post/details.html',
+                  'blog/post/detail.html',
                   {'post': post})
     
